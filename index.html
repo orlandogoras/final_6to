@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AventuraGRADO 6° - Matemáticas Interactivas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #06b6d4;
+            --border-color: #cbd5e1;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --radius: 12px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-main: #0f172a;
+                --bg-card: #1e293b;
+                --text-color: #f1f5f9;
+                --text-muted: #94a3b8;
+                --primary: #6366f1;
+                --primary-hover: #4f46e5;
+                --accent: #22d3ee;
+                --border-color: #334155;
+                --success: #059669;
+                --error: #dc2626;
+                --warning: #d97706;
+                --shadow: 0 4px 6px -1px rgba(0,0,0,0.4);
+            }
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --accent: #22d3ee;
+            --border-color: #334155;
+            --success: #059669;
+            --error: #dc2626;
+            --warning: #d97706;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.4);
+        }
+
+        [data-theme="light"] {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #06b6d4;
+            --border-color: #cbd5e1;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        button, .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        button:hover, .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        .btn-tool {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .btn-tool.active-tool {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        nav.nav-tabs {
+            background-color: var(--bg-card);
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            white-space: nowrap;
+            box-shadow: none;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        main {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .topic-card {
+            cursor: pointer;
+            border-left: 5px solid var(--primary);
+        }
+
+        .topic-card h3 {
+            color: var(--primary);
+        }
+
+        .example-box {
+            background-color: rgba(79, 70, 229, 0.05);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .lab-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media(max-width: 768px) {
+            .lab-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .svg-canvas-wrapper {
+            background: var(--bg-card);
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+
+        .controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input[type="range"], input[type="number"], input[type="text"], select {
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .exercise-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            background-color: var(--accent);
+            color: #0f172a;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .drawing-pad-container {
+            margin: 1rem 0;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .drawing-toolbar {
+            background: var(--bg-main);
+            padding: 0.5rem;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .color-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid white;
+            cursor: pointer;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+        }
+
+        canvas.sketch-pad {
+            width: 100%;
+            height: 160px;
+            touch-action: none;
+            cursor: crosshair;
+            display: block;
+        }
+
+        .answer-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .feedback {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid var(--error);
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <span>🚀</span> <span id="header-title">AventuraGRADO 6°</span>
+        </div>
+        <div class="controls">
+            <button class="btn-secondary" id="lang-toggle-btn" title="Cambiar Idioma">🌐 <span id="lang-label">ES</span></button>
+            <button class="btn-secondary" id="theme-toggle-btn" title="Cambiar Tema">🌓</button>
+        </div>
+    </header>
+
+    <nav class="nav-tabs">
+        <button class="tab-btn active" data-target="view-home" id="nav-home">🏠 Inicio</button>
+        <button class="tab-btn" data-target="view-theory" id="nav-theory">📚 Teoría y Ejemplos</button>
+        <button class="tab-btn" data-target="view-lab" id="nav-lab">🧪 Laboratorio SVG</button>
+        <button class="tab-btn" data-target="view-quiz" id="nav-quiz">📝 Práctica de Examen</button>
+    </nav>
+
+    <main>
+        <!-- HOME VIEW -->
+        <section id="view-home" class="view-section active">
+            <div class="card" style="text-align: center; padding: 3rem 1.5rem;">
+                <h1 id="home-welcome">¡Bienvenida a tu Aventura de Matemáticas, campeona! 🌟</h1>
+                <p id="home-subtitle" style="max-width: 700px; margin: 0 auto 2rem auto; color: var(--text-muted);">
+                    Prepárate para dominar las matemáticas de sexto grado con laboratorios interactivos y retos increíbles diseñados especialmente para ti. ¡Tú puedes con todo!
+                </p>
+                <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn" id="to-theory-btn"><span id="btn-start-theory">Empezar a Estudiar Teoría</span> ➔</button>
+                    <button class="btn" id="to-quiz-btn" style="background-color: var(--accent); color: #0f172a;"><span id="btn-start-quiz">Hacer Examen de Práctica</span> 📝</button>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3 id="feat-1-title">🎯 Lo que vas a dominar</h3>
+                    <p id="feat-1-desc">Números enteros (suma, resta, multiplicación y división), ecuaciones lineales (con un lado, ambos lados y paréntesis), diagramas circulares, potenciación, radicación, logaritmos, estadística y probabilidad.</p>
+                </div>
+                <div class="card">
+                    <h3 id="feat-2-title">🎨 Herramientas y Lienzo Creativo</h3>
+                    <p id="feat-2-desc">Cada problema incluye un lienzo interactivo con lápiz de colores, líneas, rectángulos, borrador de trazos y captura de pantalla para guardar tus apuntes favoritos.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- THEORY VIEW -->
+        <section id="view-theory" class="view-section">
+            <h2 id="theory-heading">📖 Guía Teórica de Matemáticas - Grado 6°</h2>
+            <p id="theory-subheading" style="color: var(--text-muted);">Haz clic en cualquier tema para explorar definiciones claras, reglas explicadas paso a paso y ejemplos reales.</p>
+            
+            <div id="theory-container"></div>
+        </section>
+
+        <!-- LAB VIEW -->
+        <section id="view-lab" class="view-section">
+            <h2 id="lab-heading">🧪 Laboratorio Matemático Interactivo (SVG)</h2>
+            <p id="lab-subheading" style="color: var(--text-muted);">Experimenta visualmente con operaciones de enteros, porcentajes circulares y potencias/raíces.</p>
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                <button class="btn tab-sub-btn active" data-lab="integers"><span id="lab-tab-1">Enteros en la Recta</span></button>
+                <button class="btn btn-secondary tab-sub-btn" data-lab="circles"><span id="lab-tab-2">Diagrama Circular (%)</span></button>
+                <button class="btn btn-secondary tab-sub-btn" data-lab="powers"><span id="lab-tab-3">Potencias y Raíces</span></button>
+            </div>
+
+            <div id="lab-integers" class="lab-sub-view card">
+                <div class="lab-container">
+                    <div class="svg-canvas-wrapper" id="integer-svg-box"></div>
+                    <div class="controls-panel">
+                        <h3 id="lab-int-title">Operaciones con Números Enteros</h3>
+                        <p id="lab-int-desc" style="font-size: 0.9rem; color: var(--text-muted);">Simula cambios de temperatura o desplazamientos en la recta numérica.</p>
+                        <div class="control-group">
+                            <label id="label-start">Valor inicial (a): <span id="val-start">-12</span></label>
+                            <input type="range" id="input-start" min="-20" max="20" value="-12">
+                        </div>
+                        <div class="control-group">
+                            <label id="label-change">Cambio o desplazamiento (b): <span id="val-change">18</span></label>
+                            <input type="range" id="input-change" min="-25" max="25" value="18">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="lab-circles" class="lab-sub-view card" style="display: none;">
+                <div class="lab-container">
+                    <div class="svg-canvas-wrapper" id="circle-svg-box"></div>
+                    <div class="controls-panel">
+                        <h3 id="lab-circ-title">Análisis de Porcentajes en Círculo</h3>
+                        <p id="lab-circ-desc" style="font-size: 0.9rem; color: var(--text-muted);">Calcula la cantidad real a partir de una encuesta de 240 estudiantes.</p>
+                        <div class="control-group">
+                            <label id="label-pct">Porcentaje de categoría (%): <span id="val-pct">35</span>%</label>
+                            <input type="range" id="input-pct" min="5" max="60" step="5" value="35">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="lab-powers" class="lab-sub-view card" style="display: none;">
+                <div class="lab-container">
+                    <div class="svg-canvas-wrapper" id="power-svg-box" style="align-items: flex-start; padding: 1.5rem;"></div>
+                    <div class="controls-panel">
+                        <h3 id="lab-pow-title">Potenciación y Radicación</h3>
+                        <p id="lab-pow-desc" style="font-size: 0.9rem; color: var(--text-muted);">Explora bases enteras y exponentes naturales.</p>
+                        <div class="control-group">
+                            <label id="label-base">Base (b): <span id="val-base">3</span></label>
+                            <input type="range" id="input-base" min="1" max="5" value="3">
+                        </div>
+                        <div class="control-group">
+                            <label id="label-exp">Exponente (e): <span id="val-exp">4</span></label>
+                            <input type="range" id="input-exp" min="1" max="6" value="4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUIZ VIEW -->
+        <section id="view-quiz" class="view-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 id="quiz-heading">📝 Práctica de Examen - Grado 6°</h2>
+                    <p id="quiz-subheading" style="color: var(--text-muted);">Problemas de aplicación diseñados especialmente para ti. ¡Demuestra todo tu talento!</p>
+                </div>
+                <div>
+                    <button class="btn" id="new-quiz-btn">🔄 Generar Nuevos Problemas</button>
+                </div>
+            </div>
+
+            <div id="quiz-questions-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p id="footer-text">AventuraGRADO 6° — ¡Hecho con cariño para impulsar tu talento matemático! 🌟</p>
+    </footer>
+
+    <script>
+        const translations = {
+            en: {
+                headerTitle: "AventuraGRADO 6°",
+                navHome: "🏠 Home",
+                navTheory: "📚 Theory & Examples",
+                navLab: "🧪 SVG Lab",
+                navQuiz: "📝 Exam Practice",
+                homeWelcome: "Welcome to your Math Adventure, Champion! 🌟",
+                homeSubtitle: "Get ready to master 6th grade math with interactive labs and incredible challenges designed especially for you. You can do anything!",
+                btnStartTheory: "Start Learning Theory",
+                btnStartQuiz: "Take Exam Quiz",
+                feat1Title: "🎯 What You Will Master",
+                feat1Desc: "Integers (addition, subtraction, multiplication & division), linear equations (one side, both sides, parentheses), pie charts, powers, roots, statistics, and probability.",
+                feat2Title: "🎨 Creative Tools & Canvas",
+                feat2Desc: "Every problem features an interactive drawing canvas with colorful pens, lines, rectangles, stroke eraser, and snapshot capture.",
+                theoryHeading: "📖 6th Grade Mathematics Theory Guide",
+                theorySubheading: "Click on any topic to explore clear definitions, step-by-step rules, and real-world examples!",
+                labHeading: "🧪 Interactive Math Lab (SVG)",
+                labSubheading: "Visually experiment with integer operations, circular percentages, and powers/roots.",
+                labTab1: "Integers on Number Line",
+                labTab2: "Circular Diagram (%)",
+                labTab3: "Powers & Roots",
+                labIntTitle: "Integer Operations",
+                labIntDesc: "Simulate temperature changes or number line shifts.",
+                labelStart: "Initial value (a):",
+                labelChange: "Change or shift (b):",
+                labCircTitle: "Circular Diagram Percentage Analysis",
+                labCircDesc: "Calculate real quantities from a survey of 240 students.",
+                labelPct: "Category percentage (%):",
+                labPowTitle: "Exponentiation & Radication",
+                labPowDesc: "Explore integer bases and natural exponents.",
+                labelBase: "Base (b):",
+                labelExp: "Exponent (e):",
+                quizHeading: "📝 Exam Practice - 6th Grade",
+                quizSubheading: "Application problems designed especially for you. Show your brilliance!",
+                btnNewQuiz: "🔄 Generate New Problem Set",
+                footerText: "AventuraGRADO 6° — Made with love to boost your math talent! 🌟",
+                checkAnswer: "Check Answer",
+                newNumbers: "🔄 New Models",
+                copySnapshot: "📋 Copy Snapshot",
+                downloadSnapshot: "💾 Download Image",
+                correctMsg: "🎉 Brilliant! You got it right, superstar!",
+                incorrectMsg: "❌ Not quite right. Try working out your steps on the canvas, you've got this!",
+                topics: [
+                    {
+                        title: "1. Suma, resta, multiplicación y división de números enteros",
+                        def: "Los números enteros incluyen los positivos, negativos y el cero.<br><br><strong>Suma y Resta:</strong> Para sumar enteros con igual signo, se suman sus valores y se conserva el signo; con distinto signo, se restan y se deja el signo del mayor. <em>¡Ojo con la resta!</em> Restar un entero equivale a sumar su opuesto: <b>a - b = a + (-b)</b>.<br><br><strong>Multiplicación y División (Ley de Signos):</strong><br>• (+) × (+) = (+)  |  (-) × (-) = (+)<br>• (+) × (-) = (-)  |  (-) × (+) = (-)<br>*(La misma regla se cumple exactamente para la división).*",
+                        ex1Title: "Ejemplo 1: Operaciones combinadas de temperatura",
+                        ex1Text: "Un congelador está a -12°C. Sube 18°C (-12 + 18 = 6°C), y luego al restar 15°C usando su opuesto: 6 - 15 = 6 + (-15) = -9°C.",
+                        ex2Title: "Ejemplo 2: Multiplicación de enteros",
+                        ex2Text: "Un submarino desciende 6 metros por minuto durante 8 minutos: (-6) × 8 = -48 metros (negativo porque indica profundidad)."
+                    },
+                    {
+                        title: "2. Solución de ecuaciones lineales (Tres tipos esenciales)",
+                        def: "Una ecuación es una balanza equilibrada con una incógnita (<i>x</i>). Para resolverla, despejamos <i>x</i> aplicando operaciones inversas.<br><br>• <b>Tipo 1 (Un solo lado):</b> Las operaciones están en un solo miembro (ej: 3<i>x</i> + 5 = 20).<br>• <b>Tipo 2 (Ambos lados):</b> La <i>x</i> aparece en los dos miembros (ej: 5<i>x</i> - 3 = 2<i>x</i> + 9). Pasamos las <i>x</i> a un lado y los números al otro.<br>• <b>Tipo 3 (Con paréntesis):</b> Aplicamos la propiedad distributiva primero para eliminar los paréntesis (ej: 3(<i>x</i> - 2) + 4 = 16).",
+                        ex1Title: "Ejemplo 1 (Un solo lado): Tarifa de taxi",
+                        ex1Text: "4 000 + 1 000<i>x</i> = 19 000. Restamos 4 000 a ambos lados: 1 000<i>x</i> = 15 000. Dividimos entre 1 000: <i>x</i> = 15 kilómetros.",
+                        ex2Title: "Ejemplo 2 (Con paréntesis): Reto de cajas",
+                        ex2Text: "3(<i>x</i> - 2) = 12. Distribuimos: 3<i>x</i> - 6 = 12. Sumamos 6: 3<i>x</i> = 18. Dividimos entre 3: <i>x</i> = 6."
+                    },
+                    {
+                        title: "3. Análisis de diagramas circulares (porcentajes)",
+                        def: "Los diagramas circulares representan partes de un total de 100%. Para hallar la cantidad exacta, multiplicas el total por el porcentaje en forma decimal.",
+                        ex1Title: "Ejemplo 1: Medios de transporte",
+                        ex1Text: "De 240 estudiantes, el 35% usa bus escolar. Cálculo: 240 × 0.35 = 84 estudiantes.",
+                        ex2Title: "Ejemplo 2: Preferencia de deportes",
+                        ex2Text: "Baloncesto (25%) + Voleibol (20%) = 45%, lo cual representa menos de la mitad del total."
+                    },
+                    {
+                        title: "4. Potenciación y sus propiedades",
+                        def: "La potenciación es una multiplicación abreviada. Propiedades principales: b<sup>n</sup> × b<sup>m</sup> = b<sup>n+m</sup> y (b<sup>n</sup>)<sup>m</sup> = b<sup>n×m</sup>.",
+                        ex1Title: "Ejemplo 1: Iluminación deportiva",
+                        ex1Text: "3 canchas × 3 zonas × 3 reflectores × 3 bombillas = 3<sup>4</sup> = 81 bombillas LED en total.",
+                        ex2Title: "Ejemplo 2: Cadena de mensajes",
+                        ex2Text: "Cada estudiante envía un mensaje a 4 amigas en 5 rondas sucesivas: 4<sup>5</sup> = 1 024 personas alcanzadas."
+                    },
+                    {
+                        title: "5. Radicación y sus propiedades",
+                        def: "La radicación es la operación inversa de la potenciación: la raíz n-ésima de <i>a</i> es <i>b</i> si b<sup>n</sup> = a.",
+                        ex1Title: "Ejemplo 1: Volumen de tanque cúbico",
+                        ex1Text: "Un tanque cúbico tiene un volumen de 729 dm³. La arista mide ∛729 = 9 dm porque 9<sup>3</sup> = 729.",
+                        ex2Title: "Ejemplo 2: Raíz de fracciones",
+                        ex2Text: "√(25/36) = 5/6 porque (5/6)<sup>2</sup> = 25/36."
+                    },
+                    {
+                        title: "6. Logaritmos (Concepto y relación)",
+                        def: "El logaritmo responde a: '¿A qué exponente debo elevar la base para obtener este número?'. Si b<sup>y</sup> = x, entonces log<sub>b</sub>(<i>x</i>) = y.",
+                        ex1Title: "Ejemplo 1: Etapas de energía",
+                        ex1Text: "La energía se triplica en cada etapa hasta 243 unidades: log<sub>3</sub>(243) = 5 porque 3<sup>5</sup> = 243.",
+                        ex2Title: "Ejemplo 2: Crecimiento de videos",
+                        ex2Text: "Un video alcanza 64 personas siguiendo 2<sup>6</sup> = 64. Su expresión logarítmica es log<sub>2</sub>(64) = 6."
+                    },
+                    {
+                        title: "7. Measures of Central Tendency (Mean, Median & Mode)",
+                        def: "Values that summarize datasets:<br><br>• <b>Mean (Arithmetic Average):</b> Sum of all values divided by the number of data points.<br>• <b>Median:</b> The middle value when data is ordered from least to greatest.<br>• <b>Mode:</b> The most frequently occurring value in the dataset.",
+                        ex1Title: "Example 1: Finding Mean and Mode",
+                        ex1Text: "Ages of 5 friends: 11, 12, 11, 13, 13. Sum = 60, Mean = 60 ÷ 5 = 12. Modes are 11 and 13.",
+                        ex2Title: "Example 2: Finding Median",
+                        ex2Text: "Ordered scores: 70, 85, 90, 95, 100. The exact middle value is 90, so the median is 90."
+                    },
+                    {
+                        title: "8. Probabilidad (Probabilidades simples)",
+                        def: "Mide la posibilidad de ocurrencia de un evento: P(E) = Casos Favorables / Casos Totales.",
+                        ex1Title: "Ejemplo 1: Fichas en una caja",
+                        ex1Text: "Una caja tiene 20 fichas (8 verdes, 5 azules, 7 rojas). P(azul) = 5/20 = 25%.",
+                        ex2Title: "Ejemplo 2: Selección de libros",
+                        ex2Text: "De 30 libros (12 aventuras, 10 ciencia ficción, 8 misterio), P(ciencia ficción) = 10/30 ≈ 33.3%."
+                    }
+                ]
+            },
+            es: {
+                headerTitle: "AventuraGRADO 6°",
+                navHome: "🏠 Inicio",
+                navTheory: "📚 Teoría y Ejemplos",
+                navLab: "🧪 Laboratorio SVG",
+                navQuiz: "📝 Práctica de Examen",
+                homeWelcome: "¡Bienvenida a tu Aventura de Matemáticas, campeona! 🌟",
+                homeSubtitle: "Prepárate para dominar las matemáticas de sexto grado con laboratorios interactivos y retos increíbles diseñados especialmente para ti. ¡Tú puedes con todo!",
+                btnStartTheory: "Empezar a Estudiar Teoría",
+                btnStartQuiz: "Hacer Examen de Práctica",
+                feat1Title: "🎯 Lo que vas a dominar",
+                feat1Desc: "Números enteros (suma, resta, multiplicación y división), ecuaciones lineales (un lado, ambos lados y paréntesis), diagramas circulares, potenciación, radicación, logaritmos, estadística y probabilidad.",
+                feat2Title: "🎨 Herramientas y Lienzo Creativo",
+                feat2Desc: "Cada problema incluye un lienzo interactivo con lápiz de colores, líneas, rectángulos, borrador de trazos y captura de pantalla para guardar tus apuntes favoritos.",
+                theoryHeading: "📖 Guía Teórica de Matemáticas - Grado 6°",
+                theorySubheading: "Haz clic en cualquier tema para explorar definiciones claras, reglas explicadas paso a paso y ejemplos reales.",
+                labHeading: "🧪 Laboratorio Matemático Interactivo (SVG)",
+                labSubheading: "Experimenta visualmente con operaciones de enteros, porcentajes circulares y potencias/raíces.",
+                labTab1: "Enteros en la Recta",
+                labTab2: "Diagrama Circular (%)",
+                labTab3: "Potencias y Raíces",
+                labIntTitle: "Operaciones con Números Enteros",
+                labIntDesc: "Simula cambios de temperatura o desplazamientos en la recta numérica.",
+                labelStart: "Valor inicial (a):",
+                labelChange: "Cambio o desplazamiento (b):",
+                labCircTitle: "Análisis de Porcentajes en Círculo",
+                labCircDesc: "Calcula la cantidad real a partir de una encuesta de 240 estudiantes.",
+                labelPct: "Porcentaje de categoría (%):",
+                labPowTitle: "Potenciación y Radicación",
+                labPowDesc: "Explora bases enteras y exponentes naturales.",
+                labelBase: "Base (b):",
+                labelExp: "Exponente (e):",
+                quizHeading: "📝 Práctica de Examen - Grado 6°",
+                quizSubheading: "Problemas de aplicación diseñados especialmente para ti. ¡Demuestra todo tu talento!",
+                btnNewQuiz: "🔄 Generar Nuevos Problemas",
+                footerText: "AventuraGRADO 6° — ¡Hecho con cariño para impulsar tu talento matemático! 🌟",
+                checkAnswer: "Comprobar respuesta",
+                newNumbers: "🔄 Nuevos Modelos",
+                copySnapshot: "📋 Copiar Captura",
+                downloadSnapshot: "💾 Descargar Imagen",
+                correctMsg: "🎉 ¡Genial! ¡Lo lograste, estrella!",
+                incorrectMsg: "❌ Casi, ¡intenta hacer tus operaciones en el lienzo o revisa los signos! ¡Tú puedes!",
+                topics: [
+                    {
+                        title: "1. Suma, resta, multiplicación y división de números enteros",
+                        def: "Los números enteros incluyen los positivos, negativos y el cero.<br><br><strong>Suma y Resta:</strong> Para sumar enteros con igual signo, se suman sus valores y se conserva el signo; con distinto signo, se restan y se deja el signo del mayor. <em>¡Ojo con la resta!</em> Restar un entero equivale a sumar su opuesto: <b>a - b = a + (-b)</b>.<br><br><strong>Multiplicación y División (Ley de Signos):</strong><br>• (+) × (+) = (+)  |  (-) × (-) = (+)<br>• (+) × (-) = (-)  |  (-) × (+) = (-)<br>*(La misma regla se cumple exactamente para la división).*",
+                        ex1Title: "Ejemplo 1: Operaciones combinadas de temperatura",
+                        ex1Text: "Un congelador está a -12°C. Sube 18°C (-12 + 18 = 6°C), y luego al restar 15°C usando su opuesto: 6 - 15 = 6 + (-15) = -9°C.",
+                        ex2Title: "Ejemplo 2: Multiplicación de enteros",
+                        ex2Text: "Un submarino desciende 6 metros por minuto durante 8 minutos: (-6) × 8 = -48 metros (negativo porque indica profundidad debajo del nivel del mar)."
+                    },
+                    {
+                        title: "2. Solución de ecuaciones lineales (Tres tipos esenciales)",
+                        def: "Una ecuación es una balanza equilibrada con una incógnita (<i>x</i>). Para resolverla, despejamos <i>x</i> aplicando operaciones inversas.<br><br>• <b>Tipo 1 (Un solo lado):</b> Las operaciones están en un solo miembro (ej: 3<i>x</i> + 5 = 20).<br>• <b>Tipo 2 (Ambos lados):</b> La <i>x</i> aparece en los dos miembros (ej: 5<i>x</i> - 3 = 2<i>x</i> + 9). Pasamos las <i>x</i> a un lado y los números al otro.<br>• <b>Tipo 3 (Con paréntesis):</b> Aplicamos la propiedad distributiva primero para eliminar los paréntesis (ej: 3(<i>x</i> - 2) + 4 = 16).",
+                        ex1Title: "Ejemplo 1 (Un solo lado): Tarifa de taxi",
+                        ex1Text: "4 000 + 1 000<i>x</i> = 19 000. Restamos 4 000 a ambos lados: 1 000<i>x</i> = 15 000. Dividimos entre 1 000: <i>x</i> = 15 kilómetros.",
+                        ex2Title: "Ejemplo 2 (Con paréntesis): Reto de cajas",
+                        ex2Text: "3(<i>x</i> - 2) = 12. Distribuimos el 3: 3<i>x</i> - 6 = 12. Sumamos 6 a ambos lados: 3<i>x</i> = 18. Dividimos entre 3: <i>x</i> = 6."
+                    },
+                    {
+                        title: "3. Análisis de diagramas circulares (porcentajes)",
+                        def: "Los diagramas circulares representan partes de un total de 100%. Para hallar la cantidad exacta, multiplicas el total por el porcentaje en forma decimal.",
+                        ex1Title: "Ejemplo 1: Medios de transporte",
+                        ex1Text: "De 240 estudiantes, el 35% usa bus escolar. Cálculo: 240 × 0.35 = 84 estudiantes.",
+                        ex2Title: "Ejemplo 2: Preferencia de deportes",
+                        ex2Text: "Baloncesto (25%) + Voleibol (20%) = 45%, lo cual representa menos de la mitad del total."
+                    },
+                    {
+                        title: "4. Potenciación y sus propiedades",
+                        def: "La potenciación es una multiplicación abreviada. Propiedades principales: b<sup>n</sup> × b<sup>m</sup> = b<sup>n+m</sup> y (b<sup>n</sup>)<sup>m</sup> = b<sup>n×m</sup>.",
+                        ex1Title: "Ejemplo 1: Iluminación deportiva",
+                        ex1Text: "3 canchas × 3 zonas × 3 reflectores × 3 bombillas = 3<sup>4</sup> = 81 bombillas LED en total.",
+                        ex2Title: "Ejemplo 2: Cadena de mensajes",
+                        ex2Text: "Cada estudiante envía un mensaje a 4 amigas en 5 rondas sucesivas: 4<sup>5</sup> = 1 024 personas alcanzadas."
+                    },
+                    {
+                        title: "5. Radicación y sus propiedades",
+                        def: "La radicación es la operación inversa de la potenciación: la raíz n-ésima de <i>a</i> es <i>b</i> si b<sup>n</sup> = a.",
+                        ex1Title: "Ejemplo 1: Volumen de tanque cúbico",
+                        ex1Text: "Un tanque cúbico tiene un volumen de 729 dm³. La arista mide ∛729 = 9 dm porque 9<sup>3</sup> = 729.",
+                        ex2Title: "Ejemplo 2: Raíz de fracciones",
+                        ex2Text: "√(25/36) = 5/6 porque (5/6)<sup>2</sup> = 25/36."
+                    },
+                    {
+                        title: "6. Logaritmos (Concepto y relación)",
+                        def: "El logaritmo responde a: '¿A qué exponente debo elevar la base para obtener este número?'. Si b<sup>y</sup> = x, entonces log<sub>b</sub>(<i>x</i>) = y.",
+                        ex1Title: "Ejemplo 1: Etapas de energía",
+                        ex1Text: "La energía se triplica en cada etapa hasta 243 unidades: log<sub>3</sub>(243) = 5 porque 3<sup>5</sup> = 243.",
+                        ex2Title: "Ejemplo 2: Crecimiento de videos",
+                        ex2Text: "Un video alcanza 64 personas siguiendo 2<sup>6</sup> = 64. Su expresión logarítmica es log<sub>2</sub>(64) = 6."
+                    },
+                    {
+                        title: "7. Medidas de tendencia central (Media, Mediana y Moda)",
+                        def: "Son valores que resumen y centralizan un conjunto de datos estadísticos:<br><br>• <b>Media (Promedio o Media Aritmética):</b> Se calcula sumando todos los valores y dividiendo el total entre la cantidad de datos.<br>• <b>Mediana:</b> Es el valor que queda exactamente en el centro al ordenar los datos de menor a mayor. Si hay dos valores centrales, se promedian.<br>• <b>Moda:</b> Es el valor que más veces se repite (el más popular).",
+                        ex1Title: "Ejemplo 1: Hallando la Media y la Moda",
+                        ex1Text: "Edades de 5 amigas: 11, 12, 11, 13, 13. Suma = 60, Media = 60 ÷ 5 = 12 años. La moda es 11 y 13 (bimodal).",
+                        ex2Title: "Ejemplo 2: Hallando la Mediana",
+                        ex2Text: "Puntajes ordenados: 70, 85, 90, 95, 100. El valor central exacto es 90, por lo que la mediana es 90."
+                    },
+                    {
+                        title: "8. Probabilidad (Probabilidades simples)",
+                        def: "Mide la posibilidad de ocurrencia de un evento: P(E) = Casos Favorables / Casos Totales.",
+                        ex1Title: "Ejemplo 1: Fichas en una caja",
+                        ex1Text: "Una caja tiene 20 fichas (8 verdes, 5 azules, 7 rojas). P(azul) = 5/20 = 25%.",
+                        ex2Title: "Ejemplo 2: Selección de libros",
+                        ex2Text: "De 30 libros (12 aventuras, 10 ciencia ficción, 8 misterio), P(ciencia ficción) = 10/30 ≈ 33.3%."
+                    }
+                ]
+            }
+        };
+
+        let currentLang = localStorage.getItem('math_lang') || 'es';
+        let currentTheme = localStorage.getItem('math_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        function t(key) {
+            return translations[currentLang][key] || key;
+        }
+
+        function updateUI() {
+            document.getElementById('header-title').textContent = t('headerTitle');
+            document.getElementById('lang-label').textContent = currentLang.toUpperCase();
+            document.getElementById('nav-home').textContent = t('navHome');
+            document.getElementById('nav-theory').textContent = t('navTheory');
+            document.getElementById('nav-lab').textContent = t('navLab');
+            document.getElementById('nav-quiz').textContent = t('navQuiz');
+
+            document.getElementById('home-welcome').textContent = t('homeWelcome');
+            document.getElementById('home-subtitle').textContent = t('homeSubtitle');
+            document.getElementById('btn-start-theory').textContent = t('btnStartTheory');
+            document.getElementById('btn-start-quiz').textContent = t('btnStartQuiz');
+            document.getElementById('feat-1-title').textContent = t('feat1Title');
+            document.getElementById('feat-1-desc').textContent = t('feat1Desc');
+            document.getElementById('feat-2-title').textContent = t('feat2Title');
+            document.getElementById('feat-2-desc').textContent = t('feat2Desc');
+
+            document.getElementById('theory-heading').textContent = t('theoryHeading');
+            document.getElementById('theory-subheading').textContent = t('theorySubheading');
+
+            document.getElementById('lab-heading').textContent = t('labHeading');
+            document.getElementById('lab-subheading').textContent = t('labSubheading');
+            document.getElementById('lab-tab-1').textContent = t('labTab1');
+            document.getElementById('lab-tab-2').textContent = t('labTab2');
+            document.getElementById('lab-tab-3').textContent = t('labTab3');
+            document.getElementById('lab-int-title').textContent = t('labIntTitle');
+            document.getElementById('lab-int-desc').textContent = t('labIntDesc');
+            document.getElementById('label-start').childNodes[0].nodeValue = t('labelStart') + " ";
+            document.getElementById('label-change').childNodes[0].nodeValue = t('labelChange') + " ";
+            document.getElementById('lab-circ-title').textContent = t('labCircTitle');
+            document.getElementById('lab-circ-desc').textContent = t('labCircDesc');
+            document.getElementById('label-pct').childNodes[0].nodeValue = t('labelPct') + " ";
+            document.getElementById('lab-pow-title').textContent = t('labPowTitle');
+            document.getElementById('lab-pow-desc').textContent = t('labPowDesc');
+            document.getElementById('label-base').childNodes[0].nodeValue = t('labelBase') + " ";
+            document.getElementById('label-exp').childNodes[0].nodeValue = t('labelExp') + " ";
+
+            document.getElementById('quiz-heading').textContent = t('quizHeading');
+            document.getElementById('quiz-subheading').textContent = t('quizSubheading');
+            document.getElementById('new-quiz-btn').textContent = t('btnNewQuiz');
+            document.getElementById('footer-text').textContent = t('footerText');
+
+            renderTheoryCards();
+        }
+
+        function renderTheoryCards() {
+            const container = document.getElementById('theory-container');
+            const topics = translations[currentLang].topics;
+            container.innerHTML = topics.map((tp) => `
+                <div class="card topic-card">
+                    <h3>${tp.title}</h3>
+                    <p>${tp.def}</p>
+                    <div class="example-box">
+                        <strong>${tp.ex1Title}</strong>
+                        <p style="margin-top: 5px; margin-bottom: 0;">${tp.ex1Text}</p>
+                    </div>
+                    <div class="example-box" style="border-left-color: var(--primary);">
+                        <strong>${tp.ex2Title}</strong>
+                        <p style="margin-top: 5px; margin-bottom: 0;">${tp.ex2Text}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Navegación por pestañas principal
+        function switchTab(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById(viewId);
+            if (target) target.classList.add('active');
+            
+            const btnMap = { 'view-home': 'nav-home', 'view-theory': 'nav-theory', 'view-lab': 'nav-lab', 'view-quiz': 'nav-quiz' };
+            const activeBtn = document.getElementById(btnMap[viewId]);
+            if(activeBtn) activeBtn.classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.getAttribute('data-target'));
+            });
+        });
+
+        // Botones internos de inicio
+        document.getElementById('to-theory-btn').addEventListener('click', () => switchTab('view-theory'));
+        document.getElementById('to-quiz-btn').addEventListener('click', () => switchTab('view-quiz'));
+
+        // Pestañas del laboratorio SVG
+        document.querySelectorAll('.tab-sub-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const sub = btn.getAttribute('data-lab');
+                document.querySelectorAll('.lab-sub-view').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.tab-sub-btn').forEach(b => b.classList.add('btn-secondary'));
+                btn.classList.remove('btn-secondary');
+                const labView = document.getElementById('lab-' + sub);
+                if (labView) labView.style.display = 'block';
+            });
+        });
+
+        // Controles y toggles
+        document.getElementById('lang-toggle-btn').addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'es' : 'en';
+            localStorage.setItem('math_lang', currentLang);
+            updateUI();
+            updateLabIntegers();
+            updateLabCircle();
+            updateLabPower();
+            initQuiz();
+        });
+
+        document.getElementById('theme-toggle-btn').addEventListener('click', () => {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('math_theme', currentTheme);
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        });
+
+        document.getElementById('new-quiz-btn').addEventListener('click', () => initQuiz());
+
+        // Laboratorio SVG 1: Enteros
+        function updateLabIntegers() {
+            const start = parseInt(document.getElementById('input-start').value);
+            const change = parseInt(document.getElementById('input-change').value);
+            const finalVal = start + change;
+            document.getElementById('val-start').textContent = start;
+            document.getElementById('val-change').textContent = change;
+
+            const box = document.getElementById('integer-svg-box');
+            let svg = `<svg viewBox="0 0 280 180" width="100%" height="100%" style="max-width: 300px;">`;
+            svg += `<line x1="20" y1="90" x2="260" y2="90" stroke="var(--text-color)" stroke-width="3" stroke-linecap="round"/>`;
+            
+            for(let v = -15; v <= 15; v += 5) {
+                const cx = 140 + (v * 10);
+                if(cx >= 20 && cx <= 260) {
+                    svg += `<line x1="${cx}" y1="83" x2="${cx}" y2="97" stroke="var(--border-color)" stroke-width="2"/>`;
+                    svg += `<text x="${cx}" y="115" font-size="10" fill="var(--text-muted)" text-anchor="middle">${v}</text>`;
+                }
+            }
+
+            const posStart = 140 + (start * 10);
+            const posFinal = 140 + (finalVal * 10);
+
+            svg += `<circle cx="${Math.min(Math.max(posStart, 25), 255)}" cy="90" r="7" fill="var(--accent)" />`;
+            svg += `<circle cx="${Math.min(Math.max(posFinal, 25), 255)}" cy="90" r="9" fill="var(--primary)" />`;
+            svg += `</svg>`;
+            svg += `<p style="margin-top:10px; font-weight:700; font-size:1.1rem;">Inicio: ${start} | Cambio: ${change} | <strong>Final: ${finalVal}</strong></p>`;
+            box.innerHTML = svg;
+        }
+
+        document.getElementById('input-start').addEventListener('input', updateLabIntegers);
+        document.getElementById('input-change').addEventListener('input', updateLabIntegers);
+
+        // Laboratorio SVG 2: Círculo
+        function updateLabCircle() {
+            const pct = parseInt(document.getElementById('input-pct').value);
+            document.getElementById('val-pct').textContent = pct;
+            const totalStudents = 240;
+            const count = Math.round((pct / 100) * totalStudents);
+
+            const box = document.getElementById('circle-svg-box');
+            const angle = (pct / 100) * 360;
+            const rad = (angle * Math.PI) / 180;
+            const x = 100 + 70 * Math.sin(rad);
+            const y = 100 - 70 * Math.cos(rad);
+            const largeArc = pct > 50 ? 1 : 0;
+            const pathData = `M 100 100 L 100 30 A 70 70 0 ${largeArc} 1 ${x} ${y} Z`;
+
+            let svg = `<svg viewBox="0 0 200 200" width="100%" height="100%" style="max-width: 200px;">`;
+            svg += `<circle cx="100" cy="100" r="70" fill="var(--border-color)" />`;
+            svg += `<path d="${pathData}" fill="var(--primary)" />`;
+            svg += `</svg>`;
+            svg += `<p style="margin-top:10px; font-weight:700; font-size:1.1rem;">${pct}% de 240 = <strong>${count} estudiantes</strong></p>`;
+            box.innerHTML = svg;
+        }
+
+        document.getElementById('input-pct').addEventListener('input', updateLabCircle);
+
+        // Laboratorio SVG 3: Potencias
+        function updateLabPower() {
+            const base = parseInt(document.getElementById('input-base').value);
+            const exp = parseInt(document.getElementById('input-exp').value);
+            document.getElementById('val-base').textContent = base;
+            document.getElementById('val-exp').textContent = exp;
+
+            const val = Math.pow(base, exp);
+            const box = document.getElementById('power-svg-box');
+            box.innerHTML = `
+                <div style="font-size:1.1rem; line-height:1.8;">
+                    <strong>Potenciación:</strong> ${base}<sup>${exp}</sup> = ${val.toLocaleString('es-CO')}<br>
+                    <strong>Radicación inversa:</strong> <sup>${exp}</sup>√${val.toLocaleString('es-CO')} = ${base}<br>
+                    <strong>Logaritmación:</strong> log<sub>${base}</sub>(${val.toLocaleString('es-CO')}) = ${exp}
+                </div>
+            `;
+        }
+
+        document.getElementById('input-base').addEventListener('input', updateLabPower);
+        document.getElementById('input-exp').addEventListener('input', updateLabPower);
+
+        // Lienzo de dibujo avanzado con borrador de trazos
+        function initDrawingPad(canvas) {
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+            let startX = 0, startY = 0;
+            let currentTool = 'pen';
+            let currentColor = '#1e293b';
+            let currentWidth = 3;
+            let strokes = [];
+
+            const wrapper = canvas.parentElement;
+            const toolbar = wrapper.querySelector('.drawing-toolbar');
+            
+            function redraw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                strokes.forEach(s => {
+                    ctx.save();
+                    ctx.strokeStyle = s.color;
+                    ctx.fillStyle = s.color;
+                    ctx.lineWidth = s.width;
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+
+                    if (s.type === 'pen') {
+                        if (s.points && s.points.length > 1) {
+                            ctx.beginPath();
+                            ctx.moveTo(s.points[0].x, s.points[0].y);
+                            for (let i = 1; i < s.points.length; i++) {
+                                ctx.lineTo(s.points[i].x, s.points[i].y);
+                            }
+                            ctx.stroke();
+                        }
+                    } else if (s.type === 'line') {
+                        ctx.beginPath();
+                        ctx.moveTo(s.x1, s.y1);
+                        ctx.lineTo(s.x2, s.y2);
+                        ctx.stroke();
+                    } else if (s.type === 'rect') {
+                        ctx.strokeRect(s.x, s.y, s.w, s.h);
+                    }
+                    ctx.restore();
+                });
+            }
+
+            toolbar.innerHTML = `
+                <button type="button" class="btn-tool active-tool" data-tool="pen" title="Pincel">✏️</button>
+                <button type="button" class="btn-tool" data-tool="line" title="Línea recta">📏</button>
+                <button type="button" class="btn-tool" data-tool="rect" title="Rectángulo">⬛</button>
+                <button type="button" class="btn-tool" data-tool="eraser" title="Borrador de trazo">🧹</button>
+                <div class="color-btn" style="background:#1e293b;" data-color="#1e293b"></div>
+                <div class="color-btn" style="background:#4f46e5;" data-color="#4f46e5"></div>
+                <div class="color-btn" style="background:#06b6d4;" data-color="#06b6d4"></div>
+                <div class="color-btn" style="background:#ef4444;" data-color="#ef4444"></div>
+                <div class="color-btn" style="background:#10b981;" data-color="#10b981"></div>
+                <button type="button" class="btn-secondary" style="padding:2px 6px; font-size:0.75rem;" data-width="2">Fino</button>
+                <button type="button" class="btn-secondary" style="padding:2px 6px; font-size:0.75rem;" data-width="6">Grueso</button>
+                <button type="button" class="btn-secondary" style="padding:2px 6px; font-size:0.75rem;" data-action="clear">🗑️</button>
+                <button type="button" class="btn" style="padding:2px 6px; font-size:0.7rem; margin-left:auto;" data-action="copy">${t('copySnapshot')}</button>
+                <button type="button" class="btn" style="padding:2px 6px; font-size:0.7rem;" data-action="download">${t('downloadSnapshot')}</button>
+            `;
+
+            toolbar.querySelectorAll('[data-tool]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentTool = btn.getAttribute('data-tool');
+                    toolbar.querySelectorAll('[data-tool]').forEach(b => b.classList.remove('active-tool'));
+                    btn.classList.add('active-tool');
+                });
+            });
+
+            toolbar.querySelectorAll('[data-color]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentColor = btn.getAttribute('data-color');
+                });
+            });
+
+            toolbar.querySelectorAll('[data-width]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentWidth = parseInt(btn.getAttribute('data-width'));
+                });
+            });
+
+            toolbar.querySelectorAll('[data-action]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const action = btn.getAttribute('data-action');
+                    if (action === 'clear') {
+                        strokes = [];
+                        redraw();
+                    } else if (action === 'copy' || action === 'download') {
+                        captureExerciseCard(btn, action);
+                    }
+                });
+            });
+
+            function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: (clientX - rect.left) * scaleX,
+                    y: (clientY - rect.top) * scaleY
+                };
+            }
+
+            function distanceToSegment(p, a, b) {
+                const l2 = (b.x - a.x)**2 + (b.y - a.y)**2;
+                if (l2 === 0) return Math.hypot(p.x - a.x, p.y - a.y);
+                let t = ((p.x - a.x) * (b.x - a.x) + (p.y - a.y) * (b.y - a.y)) / l2;
+                t = Math.max(0, Math.min(1, t));
+                return Math.hypot(p.x - (a.x + t * (b.x - a.x)), p.y - (a.y + t * (b.y - a.y)));
+            }
+
+            function hitTestStroke(pos, s) {
+                const tolerance = Math.max(s.width, 10);
+                if (s.type === 'pen') {
+                    for (let i = 0; i < s.points.length - 1; i++) {
+                        if (distanceToSegment(pos, s.points[i], s.points[i+1]) < tolerance) return true;
+                    }
+                } else if (s.type === 'line') {
+                    if (distanceToSegment(pos, {x: s.x1, y: s.y1}, {x: s.x2, y: s.y2}) < tolerance) return true;
+                } else if (s.type === 'rect') {
+                    const p1 = {x: s.x, y: s.y}, p2 = {x: s.x + s.w, y: s.y};
+                    const p3 = {x: s.x + s.w, y: s.y + s.h}, p4 = {x: s.x, y: s.y + s.h};
+                    if (distanceToSegment(pos, p1, p2) < tolerance ||
+                        distanceToSegment(pos, p2, p3) < tolerance ||
+                        distanceToSegment(pos, p3, p4) < tolerance ||
+                        distanceToSegment(pos, p4, p1) < tolerance) return true;
+                }
+                return false;
+            }
+
+            canvas.addEventListener('pointerdown', (e) => {
+                isDrawing = true;
+                const pos = getPos(e);
+                startX = pos.x;
+                startY = pos.y;
+
+                if (currentTool === 'pen') {
+                    strokes.push({
+                        type: 'pen',
+                        color: currentColor,
+                        width: currentWidth,
+                        points: [pos]
+                    });
+                } else if (currentTool === 'eraser') {
+                    strokes = strokes.filter(s => !hitTestStroke(pos, s));
+                    redraw();
+                }
+            });
+
+            canvas.addEventListener('pointermove', (e) => {
+                if (!isDrawing) return;
+                const pos = getPos(e);
+
+                if (currentTool === 'pen') {
+                    const currentStroke = strokes[strokes.length - 1];
+                    if (currentStroke) {
+                        currentStroke.points.push(pos);
+                        redraw();
+                    }
+                } else if (currentTool === 'line') {
+                    redraw();
+                    ctx.save();
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineWidth = currentWidth;
+                    ctx.lineCap = 'round';
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                    ctx.restore();
+                } else if (currentTool === 'rect') {
+                    redraw();
+                    ctx.save();
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineWidth = currentWidth;
+                    ctx.strokeRect(startX, startY, pos.x - startX, pos.y - startY);
+                    ctx.restore();
+                } else if (currentTool === 'eraser') {
+                    strokes = strokes.filter(s => !hitTestStroke(pos, s));
+                    redraw();
+                }
+            });
+
+            window.addEventListener('pointerup', (e) => {
+                if (!isDrawing) return;
+                isDrawing = false;
+                const pos = getPos(e);
+
+                if (currentTool === 'line') {
+                    strokes.push({
+                        type: 'line',
+                        color: currentColor,
+                        width: currentWidth,
+                        x1: startX,
+                        y1: startY,
+                        x2: pos.x,
+                        y2: pos.y
+                    });
+                    redraw();
+                } else if (currentTool === 'rect') {
+                    strokes.push({
+                        type: 'rect',
+                        color: currentColor,
+                        width: currentWidth,
+                        x: startX,
+                        y: startY,
+                        w: pos.x - startX,
+                        h: pos.y - startY
+                    });
+                    redraw();
+                }
+            });
+        }
+
+        async function captureExerciseCard(btn, actionType) {
+            const card = btn.closest('.exercise-card');
+            try {
+                const buttons = card.querySelectorAll('button');
+                buttons.forEach(b => b.style.display = 'none');
+                
+                const canvas = await html2canvas(card, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: null
+                });
+                
+                buttons.forEach(b => b.style.display = '');
+
+                canvas.toBlob(async (pngBlob) => {
+                    if (actionType === 'copy') {
+                        try {
+                            await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob })]);
+                            alert(currentLang === 'es' ? '¡Captura copiada al portapapeles con éxito! 📋✨' : 'Snapshot successfully copied to clipboard! 📋✨');
+                        } catch(e) {
+                            downloadBlob(pngBlob);
+                        }
+                    } else {
+                        downloadBlob(pngBlob);
+                    }
+                }, 'image/png');
+            } catch(err) {
+                const buttons = card.querySelectorAll('button');
+                buttons.forEach(b => b.style.display = '');
+                alert('Snapshot error: ' + err);
+            }
+        }
+
+        function downloadBlob(blob) {
+            const link = document.createElement('a');
+            link.download = 'matematicas-grado6-ejercicio.png';
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            alert(currentLang === 'es' ? '¡Imagen descargada a tu equipo! 💾' : 'Image downloaded to your device! 💾');
+        }
+
+        // Generador de preguntas para Grado 6° con Tipos de Ecuaciones Requeridos
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateTopicQuestion(topicIndex) {
+            if (topicIndex === 0) {
+                const init = -getRandomInt(8, 15);
+                const rise = getRandomInt(12, 22);
+                const drop = getRandomInt(10, 20);
+                return {
+                    topic: currentLang === 'es' ? 'Números Enteros (Temperatura)' : 'Integers (Temperature)',
+                    text: currentLang === 'es' ?
+                        `Un congelador de laboratorio se encuentra inicialmente a una temperatura de <strong>${init}°C</strong>. Debido a una falla, la temperatura sube <strong>${rise}°C</strong>. Tras reparar el sistema, los técnicos bajan la temperatura <strong>${drop}°C</strong>. ¿Cuál es la temperatura final en °C?` :
+                        `A lab freezer is initially at <strong>${init}°C</strong>. Due to a fault, temperature rises <strong>${rise}°C</strong>. After repair, technicians lower it by <strong>${drop}°C</strong>. What is the final temperature in °C?`,
+                    answer: init + rise - drop
+                };
+            } else if (topicIndex === 1) {
+                // Ecuaciones lineales: rotamos aleatoriamente entre los 3 tipos requeridos (Un lado, Ambos lados, Paréntesis)
+                const eqType = getRandomInt(1, 3);
+                if (eqType === 1) {
+                    // Tipo 1: Incógnita a un solo lado (ax + b = c)
+                    const a = getRandomInt(2, 6);
+                    const x = getRandomInt(3, 12);
+                    const b = getRandomInt(5, 25);
+                    const c = (a * x) + b;
+                    return {
+                        topic: currentLang === 'es' ? 'Ecuación Lineal (Un solo lado)' : 'Linear Equation (One side)',
+                        text: currentLang === 'es' ?
+                            `Resuelve la siguiente ecuación de primer grado despejando x: <br><br><strong>${a}x + ${b} = ${c}</strong><br><br>¿Cuál es el valor de x?` :
+                            `Solve the following linear equation for x: <br><br><strong>${a}x + ${b} = ${c}</strong><br><br>What is the value of x?`,
+                        answer: x
+                    };
+                } else if (eqType === 2) {
+                    // Tipo 2: Incógnita en ambos lados (ax + b = cx + d)
+                    const a = getRandomInt(5, 9);
+                    const c = getRandomInt(2, 4); // a > c
+                    const x = getRandomInt(2, 10);
+                    const b = getRandomInt(3, 15);
+                    const d = (a * x) + b - (c * x);
+                    return {
+                        topic: currentLang === 'es' ? 'Ecuación Lineal (Ambos lados)' : 'Linear Equation (Both sides)',
+                        text: currentLang === 'es' ?
+                            `Resuelve la ecuación con la incógnita en ambos lados: <br><br><strong>${a}x + ${b} = ${c}x + ${d}</strong><br><br>¿Cuál es el valor de x?` :
+                            `Solve the equation with variables on both sides: <br><br><strong>${a}x + ${b} = ${c}x + ${d}</strong><br><br>What is the value of x?`,
+                        answer: x
+                    };
+                } else {
+                    // Tipo 3: Con paréntesis a(x - b) = c
+                    const a = getRandomInt(2, 4);
+                    const x = getRandomInt(5, 14);
+                    const sub = getRandomInt(1, 4);
+                    const c = a * (x - sub);
+                    return {
+                        topic: currentLang === 'es' ? 'Ecuación Lineal (Con paréntesis)' : 'Linear Equation (With parentheses)',
+                        text: currentLang === 'es' ?
+                            `Resuelve la ecuación aplicando propiedad distributiva: <br><br><strong>${a}(x - ${sub}) = ${c}</strong><br><br>¿Cuál es el valor de x?` :
+                            `Solve the equation with parentheses: <br><br><strong>${a}(x - ${sub}) = ${c}</strong><br><br>What is the value of x?`,
+                        answer: x
+                    };
+                }
+            } else if (topicIndex === 2) {
+                const total = 240;
+                const pct = getRandomInt(2, 7) * 5;
+                return {
+                    topic: currentLang === 'es' ? 'Diagramas Circulares (%)' : 'Pie Charts (%)',
+                    text: currentLang === 'es' ?
+                        `En una encuesta a <strong>${total} estudiantes</strong> sobre medios de transporte, el sector del bus escolar representa el <strong>${pct}%</strong>. ¿Cuántos estudiantes utilizan el bus escolar?` :
+                        `In a survey of <strong>${total} students</strong> about transport, school bus represents <strong>${pct}%</strong>. How many students use the school bus?`,
+                    answer: Math.round((pct / 100) * total)
+                };
+            } else if (topicIndex === 3) {
+                const b = getRandomInt(2, 4);
+                const e = getRandomInt(3, 5);
+                return {
+                    topic: currentLang === 'es' ? 'Potenciación (Crecimiento)' : 'Exponentiation (Growth)',
+                    text: currentLang === 'es' ?
+                        `Un mensaje se propaga de modo que cada persona se lo envía a <strong>${b} amigas</strong> en cada una de las <strong>${e} rondas</strong> sucesivas. ¿Cuántas personas reciben el mensaje en total en la última ronda (${b}<sup>${e}</sup>)?` :
+                        `A message spreads such that each person sends it to <strong>${b} friends</strong> in each of <strong>${e} rounds</strong>. How many people receive it in total (${b}<sup>${e}</sup>)?`,
+                    answer: Math.pow(b, e)
+                };
+            } else if (topicIndex === 4) {
+                const root = getRandomInt(5, 9);
+                return {
+                    topic: currentLang === 'es' ? 'Radicación (Volumen Cúbico)' : 'Radication (Cubic Volume)',
+                    text: currentLang === 'es' ?
+                        `Un tanque en forma de cubo tiene un volumen de <strong>${root*root*root} dm³</strong>. ¿Cuánto mide cada arista en decímetros (dm)?` :
+                        `A cubic water tank has a volume of <strong>${root*root*root} dm³</strong>. What is the length of each edge in decimeters?`,
+                    answer: root
+                };
+            } else if (topicIndex === 5) {
+                const base = getRandomInt(2, 4);
+                const exp = getRandomInt(3, 5);
+                const val = Math.pow(base, exp);
+                return {
+                    topic: currentLang === 'es' ? 'Logaritmos (Relación)' : 'Logarithms (Relation)',
+                    text: currentLang === 'es' ?
+                        `Calcula el valor del logaritmo asociado a la potenciación ${base}<sup>${exp}</sup> = ${val}: <strong>log<sub>${base}</sub>(${val}) = ?</strong>` :
+                        `Calculate the logarithm value associated with ${base}<sup>${exp}</sup> = ${val}: <strong>log<sub>${base}</sub>(${val}) = ?</strong>`,
+                    answer: exp
+                };
+            } else if (topicIndex === 6) {
+                const subType = getRandomInt(1, 3);
+                if (subType === 1) {
+                    // Media (Promedio)
+                    return {
+                        topic: currentLang === 'es' ? 'Tendencia Central (Media o Promedio)' : 'Central Tendency (Mean)',
+                        text: currentLang === 'es' ?
+                            `Calcula la <strong>media aritmética (promedio)</strong> de las siguientes notas de matemáticas: <strong>3, 4, 5, 4</strong>.` :
+                            `Calculate the <strong>arithmetic mean (average)</strong> of the following math grades: <strong>3, 4, 5, 4</strong>.`,
+                        answer: 4
+                    };
+                } else if (subType === 2) {
+                    // Mediana
+                    return {
+                        topic: currentLang === 'es' ? 'Tendencia Central (Mediana)' : 'Central Tendency (Median)',
+                        text: currentLang === 'es' ?
+                            `Ordena de menor a mayor y calcula la <strong>mediana</strong> del conjunto de puntajes: <strong>75, 90, 80, 85, 95</strong>.` :
+                            `Order from least to greatest and calculate the <strong>median</strong> of the score set: <strong>75, 90, 80, 85, 95</strong>.`,
+                        answer: 85
+                    };
+                } else {
+                    // Moda
+                    return {
+                        topic: currentLang === 'es' ? 'Tendencia Central (Moda)' : 'Central Tendency (Mode)',
+                        text: currentLang === 'es' ?
+                            `Identifica la <strong>moda</strong> (el valor que más se repite) en las edades registradas del club de lectura: <strong>11, 12, 12, 13, 12, 14</strong>.` :
+                            `Identify the <strong>mode</strong> (most frequent value) in the recorded book club ages: <strong>11, 12, 12, 13, 12, 14</strong>.`,
+                        answer: 12
+                    };
+                }
+            } else {
+                const green = getRandomInt(6, 10);
+                const blue = getRandomInt(4, 7);
+                const red = getRandomInt(5, 8);
+                const total = green + blue + red;
+                return {
+                    topic: currentLang === 'es' ? 'Probabilidad Simple' : 'Simple Probability',
+                    text: currentLang === 'es' ?
+                        `En una caja hay <strong>${total} fichas</strong> en total: ${green} verdes, ${blue} azules y ${red} rojas. Si se saca una ficha al azar, ¿cuántos casos favorables hay para sacar una ficha <strong>azul</strong>?` :
+                        `A box contains <strong>${total} tokens</strong>: ${green} green, ${blue} blue, and ${red} red. If a token is drawn at random, how many favorable outcomes are there to draw a <strong>blue</strong> token?`,
+                    answer: blue
+                };
+            }
+        }
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-questions-container');
+            const questions = [];
+            
+            for(let i = 0; i < 8; i++) {
+                questions.push(generateTopicQuestion(i));
+            }
+            
+            const finalQuestions = questions.sort(() => Math.random() - 0.5);
+
+            container.innerHTML = finalQuestions.map((q, idx) => {
+                const canvasId = `sketch-quiz-${idx}`;
+                return `
+                    <div class="exercise-card" data-answer="${q.answer}">
+                        <div class="exercise-header">
+                            <span class="badge">${q.topic}</span>
+                            <span style="font-weight:700; font-size:0.9rem;">#${idx + 1}</span>
+                        </div>
+                        <p>${q.text}</p>
+                        
+                        <div class="drawing-pad-container">
+                            <div class="drawing-toolbar"></div>
+                            <canvas id="${canvasId}" class="sketch-pad" width="600" height="160"></canvas>
+                        </div>
+
+                        <div class="answer-row">
+                            <label>${currentLang === 'es' ? 'Tu respuesta:' : 'Your Answer:'}</label>
+                            <input type="number" step="any" class="user-answer-input" placeholder="0" style="width: 140px;">
+                            <button type="button" class="btn check-ans-btn">${t('checkAnswer')}</button>
+                            <button type="button" class="btn btn-secondary new-models-btn">${t('newNumbers')}</button>
+                        </div>
+                        <div class="feedback"></div>
+                    </div>
+                `;
+            }).join('');
+
+            finalQuestions.forEach((q, idx) => {
+                const canvas = document.getElementById(`sketch-quiz-${idx}`);
+                if(canvas) initDrawingPad(canvas);
+            });
+
+            // Asignar eventos a los botones de comprobar y nuevos modelos recién creados
+            container.querySelectorAll('.exercise-card').forEach(card => {
+                const expected = parseFloat(card.getAttribute('data-answer'));
+                const input = card.querySelector('.user-answer-input');
+                const feedback = card.querySelector('.feedback');
+
+                card.querySelector('.check-ans-btn').addEventListener('click', () => {
+                    const userVal = parseFloat(input.value);
+                    if(isNaN(userVal)) {
+                        feedback.className = 'feedback incorrect';
+                        feedback.textContent = currentLang === 'es' ? '⚠️ Por favor ingresa un número.' : '⚠️ Please enter a number.';
+                        return;
+                    }
+                    if(Math.abs(userVal - expected) < 0.001) {
+                        feedback.className = 'feedback correct';
+                        feedback.textContent = t('correctMsg');
+                    } else {
+                        feedback.className = 'feedback incorrect';
+                        feedback.textContent = t('incorrectMsg') + ` (${currentLang === 'es' ? 'Correcta:' : 'Correct:'} ${expected})`;
+                    }
+                });
+
+                card.querySelector('.new-models-btn').addEventListener('click', () => {
+                    initQuiz();
+                });
+            });
+        }
+
+        // Carga inicial al cargar el DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUI();
+            updateLabIntegers();
+            updateLabCircle();
+            updateLabPower();
+            initQuiz();
+        });
+    </script>
+</body>
+</html>
